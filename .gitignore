@@ -1,0 +1,7 @@
+# Ignore compiled binaries
+ans
+swap
+a.out
+
+# Ignore object files
+*.o
