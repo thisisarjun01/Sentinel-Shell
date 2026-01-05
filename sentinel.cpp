@@ -19,6 +19,11 @@ int main()
         stringstream ss(input);
         string command;
         ss >> command;
+
+	for (char &ch : command) {
+    	ch = tolower(ch);
+	}
+
         if(command == "exit") {
             break;
         }
