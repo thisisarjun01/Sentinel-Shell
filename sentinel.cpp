@@ -1,54 +1,59 @@
 #include<iostream>
-#include<string>
 #include<sstream>
+#include<ctime>
 using namespace std;
 int main()
 {
     string input;
-    cout<<"---Welcome to Sentinel Shell---"<<'\n';
+    cout << "========================================" << endl;
+    cout << "   SENTINEL SHELL v1.0 - Day 5 Edition  " << endl;
+    cout << "   Type 'help' to see commands.         " << endl;
+    cout << "========================================" << endl;
+    
     while(true)
     {
-        cout<<"sentinel>";
-        getline(cin, input);
+        cout<<"Sentinel>";
+       if (!getline(cin,input)) break;
+       if (input.empty()) continue;
 
         stringstream ss(input);
         string command;
         ss >> command;
-	if (command.empty())
-        {continue;}
-
-        else if(command=="exit")
-
-        {
-            cout<<"Goodbye \n ";
+        if(command == "exit") {
             break;
         }
-        else if(command=="help")
-        {
-            cout<<"---sentinel shell help menu---\n";
-            cout<<"clear: clear the screen\n";
-            cout<<"help: open this window\n";
-            cout<<"say [text]: repeats the test back\n ";
-            cout<<"exit: exit the shell\n";
+        else if(command == "about") {
+            cout << R"(
+  _____            _   _            _ 
+ / ____|          | | (_)          | |
+| (___   ___ _ __ | |_ _ _ __   ___| |
+ \___ \ / _ \ '_ \| __| | '_ \ / _ \ |
+ ____) |  __/ | | | |_| | | | |  __/ |
+|_____/ \___|_| |_|\__|_|_| |_|\___|_|
+            Built by: Rohit (@thisisrohit01)
+            )" << endl;
         }
-        else if (command=="clear")
-        {
+        else if(command == "date") {
+            time_t now = time(0);
+            char* dt = ctime(&now);
+            cout << "Current System Time: " << dt;
+        }
+        else if(command == "clear") {
             system("clear");
         }
-        else if(command=="say")
-        {
-            string remainder;
-	    ss>>ws;
-            getline(ss, remainder);
-            cout<<remainder<<'\n';
+        else if(command == "help") {
+            cout << "Available commands: about, date, say, clear, exit" << endl;
         }
-        else
-        {
-            
-            cout<<"sentinel: command not found "<<command <<'\n';
-            
-
+        else if(command == "say") {
+            string remainder;
+            ss >> ws;
+            getline(ss, remainder);
+            cout << remainder << endl;
+        }
+        else {
+            cout << "sentinel: command not found: " << command << endl;
         }
     }
     return 0;
 }
+    
