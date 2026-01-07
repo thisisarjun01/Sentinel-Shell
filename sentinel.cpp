@@ -3,6 +3,8 @@
 #include<sstream>
 #include<ctime>
 #include<cctype>
+#include<filesystem>
+namespace fs=std::filesystem;
 using namespace std;
 int main()
 {
@@ -28,7 +30,7 @@ int main()
         }
         else if(command=="help")
         {
-            cout<<"available command: say ,clear ,time ,help ,create ,write, about ,exit,read"<<endl;
+            cout<<"available command: say ,clear ,time ,help ,create ,write, about ,read ,delete.list ,exit"<<endl;
         }
         else if (command == "about")
         {
@@ -108,10 +110,33 @@ int main()
                 cout<<myText<<endl;
             }
         }
+        else if(command=="list")
+        {
+            cout<<"Listing files in current directory : "<<endl;
+            for(const auto & entry :fs::directory_iterator("."))
+            {
+                cout<<" -"<<entry.path().filename().string()<<endl;
+            }
+        }
+        else if (command=="delete")
+        {
+            string fileName;
+            ss>>fileName;
+            if(fs::remove(fileName))
+            {
+                cout<<"Successfully deleted file: "<<fileName<<endl;
+            }
+            else
+            {
+                cout<<"error: file'"<<fileName<<"' not found"<<endl;
+            }
+        }
         else
         {
             cout<<"sentinel command not found"<<endl;
         }
+        
+
 
 
     }
