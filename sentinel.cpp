@@ -1,34 +1,34 @@
-#include <iostream>
-#include <sstream>
-#include <ctime>
-#include <fstream>
-#include <cctype>
+#include<iostream>
+#include<fstream>
+#include<sstream>
+#include<ctime>
+#include<cctype>
 using namespace std;
-
 int main()
 {
     string input;
-    cout << "========================================" << endl;
-    cout << "   SENTINEL SHELL v1.0 - Day 6 Edition  " << endl;
-    cout << "   Type 'help' to see commands.         " << endl;
-    cout << "========================================" << endl;
-    
-    while (true)
+    while(true)
     {
-        cout << "Sentinel>";
-        if (!getline(cin, input)) break;
-        if (input.empty()) continue;
+        cout<<"sentinel>";
+        if(!getline(cin,input))break;
+        if(input.empty())continue;
 
-        stringstream ss(input);
         string command;
-        ss >> command;
+        stringstream ss(input);
+        ss>>command;
 
-        for (char &ch : command)
+        for(char &ch : command)
+        {
             ch = tolower(ch);
+        }
 
-        if (command == "exit")
+        if (command=="exit")
         {
             break;
+        }
+        else if(command=="help")
+        {
+            cout<<"available command: say ,clear ,time ,help ,create ,write, about ,exit,read"<<endl;
         }
         else if (command == "about")
         {
@@ -42,68 +42,78 @@ int main()
             Built by: Rohit (@thisisrohit01)
 )" << endl;
         }
-        else if (command == "date")
+        else if(command=="time")
         {
-            time_t now = time(0);
-            char* dt = ctime(&now);
-            cout << "Current System Time: " << dt;
-        }
-        else if (command == "clear")
+            time_t now=time(0);
+            char* dt =ctime(&now);
+            cout<<"current system time: "<<dt<<endl;
+        }   
+        else if(command=="clear")
         {
             system("clear");
-        }
-        else if (command == "help")
+        }   
+        else if(command=="say")
         {
-            cout << "Available commands: about, date, say, clear, create, write, exit" << endl;
-        }
-        else if (command == "say")
-        {
+            ss>>ws;
             string remainder;
-            ss >> ws;
-            getline(ss, remainder);
-            cout << remainder << endl;
+            getline(ss,remainder);
+            cout<<remainder<<endl;
         }
-        else if (command == "create")
+        else if(command=="create")
         {
-            string filename;
-            ss >> filename;
-
-            ofstream file(filename);
-            if (file)
+            string fileName;
+            ss>>fileName;
+            ofstream file(fileName);
+            if(file)
             {
-                cout << "Successfully created file: " << filename << endl;
+                cout<<"Successfully created file: "<<fileName<<endl;
                 file.close();
-            }
+            } 
             else
             {
-                cout << "Error: Could not create file." << endl;
+                cout<<"Error in creating file: "<<fileName<<endl;
             }
         }
-        else if (command == "write")
+        else if(command=="write")
         {
-            string filename;
-            ss >> filename;
+            string fileName;
+            ss>>fileName;
 
             string content;
-            ss >> ws;
-            getline(ss, content);
+            ss>>ws;
+            getline(ss,content);
 
-            ofstream file(filename, ios::app);
-            if (file)
+            ofstream file(fileName,ios::app);
+            if(file)
             {
-                file << content << endl;
-                cout << "Written to " << filename << endl;
+                file<<content<<endl;
+                cout<<"written to file: "<<fileName<<endl;
             }
             else
             {
-                cout << "Error: Could not write to file." << endl;
+                cout<<"error could not write in file: "<<fileName<<endl;
+            }
+        }
+        else if(command=="read")
+        {
+            ss>>ws;
+            string fileName;
+            ss>>fileName;
+
+            string myText;
+            ifstream file(fileName);
+            if (!file.is_open()) { cout << "File not found!"; }
+            while(getline(file,myText))
+            {
+                cout<<myText<<endl;
             }
         }
         else
         {
-            cout << "sentinel: command not found: " << command << endl;
+            cout<<"sentinel command not found"<<endl;
         }
-    }
 
+
+    }
     return 0;
 }
