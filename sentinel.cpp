@@ -4,16 +4,20 @@
 #include<ctime>
 #include<cctype>
 #include<filesystem>
+#include<vector>
 namespace fs=std::filesystem;
 using namespace std;
 int main()
 {
     string input;
+    vector<string> history;
     while(true)
     {
-        cout<<"sentinel>";
+        cout<<"sentinel>"<<fs::current_path().string() <<"> ";
         if(!getline(cin,input))break;
         if(input.empty())continue;
+
+        history.push_back(input);
 
         string command;
         stringstream ss(input);
@@ -30,7 +34,7 @@ int main()
         }
         else if(command=="help")
         {
-            cout<<"available command: say ,clear ,time ,help ,create ,write, about ,read ,delete.list ,exit"<<endl;
+            cout<<"available command: say ,clear ,time ,help ,create ,write, about ,read ,delete.list ,history ,cd ,exit"<<endl;
         }
         else if (command == "about")
         {
@@ -130,6 +134,27 @@ int main()
             {
                 cout<<"error: file'"<<fileName<<"' not found"<<endl;
             }
+        }
+        else if(command=="history")
+        {
+            for(size_t i=0;i<history.size();++i)
+            {
+                cout<<i+1<<" "<<history[i]<<endl;
+            }
+        }
+        else if(command=="cd")
+        {
+            string path;
+            ss>>path;
+            try
+            {
+                fs::current_path(path);
+            }
+            catch(const fs::filesystem_error& e)
+            {
+                std::cerr <<"Error: "<<e.what() <<endl;
+            }
+            
         }
         else
         {
