@@ -137,9 +137,15 @@ int main()
         }
         else if(command=="history")
         {
-            for(size_t i=0;i<history.size();++i)
+            if (history.empty()){
+                cout<<"No commands entered yet"<<endl;
+            }
+            else
             {
-                cout<<i+1<<" "<<history[i]<<endl;
+                for(size_t i=0;i<history.size();++i)
+                {
+                    cout<<i+1<<" "<<history[i]<<endl;
+                }
             }
         }
         else if(command=="cd")
