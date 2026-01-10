@@ -5,6 +5,7 @@
 #include<cctype>
 #include<filesystem>
 #include<vector>
+#include<cstdlib>
 namespace fs=std::filesystem;
 using namespace std;
 int main()
@@ -34,7 +35,11 @@ int main()
         }
         else if(command=="help")
         {
-            cout<<"available command: say ,clear ,time ,help ,create ,write, about ,read ,delete.list ,history ,cd ,exit"<<endl;
+            cout << "\n--- Sentinel Built-in Commands ---" << endl;
+            cout << "File Ops:  create, write, read, delete, list" << endl;
+            cout << "System:    cd, time, clear, history, about" << endl;
+            cout << "Utils:     say, help, exit" << endl;
+            cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
         }
         else if (command == "about")
         {
@@ -56,8 +61,12 @@ int main()
         }   
         else if(command=="clear")
         {
+            #ifdef _WIN32
+            system("cls");
+        #else
             system("clear");
-        }   
+        #endif
+}  
         else if(command=="say")
         {
             ss>>ws;
@@ -164,7 +173,11 @@ int main()
         }
         else
         {
-            cout<<"sentinel command not found"<<endl;
+            int result=system(input.c_str());
+            if(result!=0)
+            {
+                cout << "sentinel: '" << command << "' is not a recognized internal or system command." << endl;
+            }
         }
         
 
