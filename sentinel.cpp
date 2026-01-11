@@ -8,13 +8,18 @@
 #include<cstdlib>
 namespace fs=std::filesystem;
 using namespace std;
+#define RESET   "\033[0m"
+#define GREEN   "\033[32m"     
+#define BLUE    "\033[34m"     
+#define RED     "\033[31m"     
+#define MAGENTA "\033[35m"     
 int main()
 {
     string input;
     vector<string> history;
     while(true)
     {
-        cout<<"sentinel>"<<fs::current_path().string() <<"> ";
+        cout<<GREEN<<"sentinel>"<<BLUE<<fs::current_path().string() <<RESET<<"> ";
         if(!getline(cin,input))break;
         if(input.empty())continue;
 
@@ -176,7 +181,7 @@ int main()
             int result=system(input.c_str());
             if(result!=0)
             {
-                cout << "sentinel: '" << command << "' is not a recognized internal or system command." << endl;
+                cout <<RED<<"sentinel: '" << command << "' is not a recognized internal or system command." <<RESET<<endl;
             }
         }
         
