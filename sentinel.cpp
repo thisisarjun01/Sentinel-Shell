@@ -12,11 +12,29 @@ using namespace std;
 #define GREEN   "\033[32m"     
 #define BLUE    "\033[34m"     
 #define RED     "\033[31m"     
-#define MAGENTA "\033[35m"     
+#define MAGENTA "\033[35m"  
+void loadHistory(vector<string>& history) {
+    ifstream file(".sentinel_history");
+    string line;
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            history.push_back(line);
+        }
+        file.close();
+    }
+}
+void saveToHistoryFile(const string& input) {
+    ofstream file(".sentinel_history", ios::app);
+    if (file.is_open()) {
+        file << input << endl;
+        file.close();
+    }
+}
 int main()
 {
     string input;
     vector<string> history;
+    loadHistory(history);
     while(true)
     {
         cout<<GREEN<<"sentinel>"<<BLUE<<fs::current_path().string() <<RESET<<"> ";
@@ -24,10 +42,14 @@ int main()
         if(input.empty())continue;
 
         history.push_back(input);
+        
 
         string command;
         stringstream ss(input);
         ss>>command;
+        if (command != "history" && !input.empty()) {
+    saveToHistoryFile(input);
+}
 
         for(char &ch : command)
         {
