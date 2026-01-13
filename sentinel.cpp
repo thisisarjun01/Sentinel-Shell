@@ -30,14 +30,22 @@ void saveToHistoryFile(const string& input) {
         file.close();
     }
 }
+string getUsername() {
+    char* user = getenv("USER");      
+    if (user == nullptr) {
+        user = getenv("USERNAME");  
+    }
+    return (user != nullptr) ? string(user) : "user";
+}
 int main()
 {
     string input;
     vector<string> history;
     loadHistory(history);
+    string username = getUsername();
     while(true)
     {
-        cout<<GREEN<<"sentinel>"<<BLUE<<fs::current_path().string() <<RESET<<"> ";
+        cout << MAGENTA << username << "@sentinel" << RESET << ":" << BLUE << fs::current_path().string() << RESET << "> ";
         if(!getline(cin,input))break;
         if(input.empty())continue;
 
@@ -47,15 +55,17 @@ int main()
         string command;
         stringstream ss(input);
         ss>>command;
-        if (command != "history" && !input.empty()) {
-    saveToHistoryFile(input);
-}
+        
 
         for(char &ch : command)
         {
             ch = tolower(ch);
         }
-
+        
+        if (command != "history" && !input.empty()) {
+            saveToHistoryFile(input);
+        }
+        
         if (command=="exit")
         {
             break;
