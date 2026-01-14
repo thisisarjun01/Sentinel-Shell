@@ -160,14 +160,25 @@ int main()
                 cout<<myText<<endl;
             }
         }
-        else if(command=="list")
-        {
-            cout<<"Listing files in current directory : "<<endl;
-            for(const auto & entry :fs::directory_iterator("."))
-            {
-                cout<<" -"<<entry.path().filename().string()<<endl;
-            }
+        else if(command == "list")
+{
+    cout << "Type\tSize\t\tName" << endl;
+    cout << "----\t----\t\t----" << endl;
+    
+    for(const auto & entry : fs::directory_iterator("."))
+    {
+        auto path = entry.path();
+        string name = path.filename().string();
+        
+        if (fs::is_directory(path)) {
+            cout << "[DIR]\t---\t\t" << BLUE << name << RESET << endl;
+        } else {
+            // Convert bytes to KB for readability
+            uintmax_t size = fs::file_size(path) / 1024; 
+            cout << "[FILE]\t" << size << " KB\t\t" << name << endl;
         }
+    }
+}
         else if (command=="delete")
         {
             string fileName;
