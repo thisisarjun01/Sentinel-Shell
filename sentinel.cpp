@@ -73,7 +73,7 @@ int main()
         else if(command=="help")
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
-            cout << "File Ops:  create, write, read, delete, list" << endl;
+            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir" << endl;
             cout << "System:    cd, time, clear, history, about" << endl;
             cout << "Utils:     say, help, exit" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
@@ -190,6 +190,33 @@ int main()
             else
             {
                 cout<<"error: file'"<<fileName<<"' not found"<<endl;
+            }
+        }
+        else if (command == "mkdir")
+        {
+            string dirName;
+            if (!(ss >> dirName)) {
+                cout << RED << "Error: Provide a directory name." << RESET << endl;
+            } else {
+                if (fs::create_directory(dirName)) {
+                    cout << "Successfully created directory: " << dirName << endl;
+                } else {
+                    cout << RED << "Error: Could not create directory (it might already exist)." << RESET << endl;
+                }
+            }
+        }
+        else if (command == "rmdir")
+        {
+            string dirName;
+            if (!(ss >> dirName)) {
+                cout << RED << "Error: Provide a directory name." << RESET << endl;
+            } else {
+                // remove_all returns the number of files/dirs deleted
+                if (fs::remove_all(dirName) > 0) {
+                    cout << "Successfully removed directory and its contents: " << dirName << endl;
+                } else {
+                    cout << RED << "Error: Directory not found or could not be removed." << RESET << endl;
+                }
             }
         }
         else if(command=="history")
