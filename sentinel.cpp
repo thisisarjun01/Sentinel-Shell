@@ -232,6 +232,32 @@ int main()
                 }
             }
         }
+        else if (command == "search") {
+    string target;
+    if (!(ss >> target)) {
+        cout << RED << "Error: Provide a search term." << RESET << endl;
+    } else {
+        try {
+            bool found = false;
+            
+            for (const auto& entry : fs::recursive_directory_iterator(".")) {
+                if (entry.path().filename().string().find(target) != string::npos) {
+                    cout << GREEN << "[FOUND] " << RESET << entry.path().string() << endl;
+                    found = true;
+                }
+            }
+            if (!found) cout << "No matches found." << endl;
+        } 
+        
+        catch (const fs::filesystem_error& e) {
+            cout << RED << "Access Error: " << e.what() << RESET << endl;
+        }
+        
+        catch (const exception& e) {
+            cout << RED << "Unexpected Error: " << e.what() << RESET << endl;
+        }
+    }
+}
         else if(command=="cd")
         {
             string path;
