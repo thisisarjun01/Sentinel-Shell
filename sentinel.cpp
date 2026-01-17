@@ -6,6 +6,7 @@
 #include<filesystem>
 #include<vector>
 #include<cstdlib>
+#include<map>
 namespace fs=std::filesystem;
 using namespace std;
 #define RESET   "\033[0m"
@@ -43,6 +44,13 @@ int main()
     vector<string> history;
     loadHistory(history);
     string username = getUsername();
+    map<string, string> aliases = {
+    {"ls", "list"},
+    {"h", "history"},
+    {"cls", "clear"},
+    {"md", "mkdir"},
+    {"rd", "rmdir"}
+};
     while(true)
     {
         cout << MAGENTA << username << "@sentinel" << RESET << ":" << BLUE << fs::current_path().string() << RESET << "> ";
@@ -60,6 +68,10 @@ int main()
         for(char &ch : command)
         {
             ch = tolower(ch);
+        }
+              
+        if (aliases.count(command)) {
+            command = aliases[command];
         }
         
         if (command != "history" && !input.empty()) {
