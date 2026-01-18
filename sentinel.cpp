@@ -86,7 +86,7 @@ int main()
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
             cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir" << endl;
-            cout << "System:    cd, time, clear, history, about" << endl;
+            cout << "System:    cd, time, clear, history, about,stats" << endl;
             cout << "Utils:     say, help, exit" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
         }
@@ -231,6 +231,29 @@ int main()
                 }
             }
         }
+        else if (command == "stats") {
+            try {
+                
+                fs::space_info si = fs::space(".");
+
+                
+                double total = static_cast<double>(si.capacity) / (1024 * 1024 * 1024);
+                double available = static_cast<double>(si.available) / (1024 * 1024 * 1024);
+                double used = total - available;
+
+                cout << "\n--- Drive Statistics ---" << endl;
+                cout << "Total Capacity: " << total << " GB" << endl;
+                cout << "Used Space:     " << used << " GB" << endl;
+                cout << "Free Available: " << available << " GB" << endl;
+                
+                
+                double percentUsed = (used / total) * 100;
+                cout << "Disk Usage:     " << percentUsed << "%" << endl;
+            }
+            catch (const fs::filesystem_error& e) {
+                cout << RED << "Error fetching disk stats: " << e.what() << RESET << endl;
+            }
+        }
         else if(command=="history")
         {
             if (history.empty()){
@@ -299,3 +322,4 @@ int main()
     }
     return 0;
 }
+
