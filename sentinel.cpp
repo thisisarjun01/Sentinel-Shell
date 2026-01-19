@@ -115,7 +115,27 @@ int main()
         #else
             system("clear");
         #endif
-}  
+}
+	else if (command == "run") {
+            string scriptName;
+            if (!(ss >> scriptName)) {
+                cout << RED << "Error: Provide a script file name (e.g., run setup.txt)" << RESET << endl;
+            } else {
+                ifstream scriptFile(scriptName);
+                if (!scriptFile.is_open()) {
+                    cout << RED << "Error: Could not open script file '" << scriptName << "'" << RESET << endl;
+                } else {
+                    string scriptLine;
+                    cout << MAGENTA << "Executing script: " << scriptName << "..." << RESET << endl;
+                    while (getline(scriptFile, scriptLine)) {
+                        if (scriptLine.empty() || scriptLine[0] == '#') continue;
+                        cout << BLUE << " > " << RESET << scriptLine << endl;
+                        system(scriptLine.c_str()); 
+                    }
+                    cout << GREEN << "Script execution finished." << RESET << endl;
+                }
+            }
+        }  
         else if(command=="say")
         {
             ss>>ws;
