@@ -116,6 +116,35 @@ int main()
             system("clear");
         #endif
 }
+	else if (command == "sysinfo") {
+            cout << "\n--- Sentinel System Report ---" << endl;
+            
+            // Detecting Operating System
+            cout << "OS:       ";
+            #ifdef _WIN32
+                cout << "Windows (64-bit/32-bit)" << endl;
+            #elif __APPLE__
+                cout << "macOS / OSX" << endl;
+            #elif __linux__
+                cout << "Linux Kernel" << endl;
+            #else
+                cout << "Unknown OS" << endl;
+            #endif
+
+            cout << "Arch:     ";
+            #if defined(__x86_64__) || defined(_M_X64)
+                cout << "x86_64 (Intel/AMD)" << endl;
+            #elif defined(__aarch64__) || defined(_M_ARM64)
+                cout << "ARM64 (Apple Silicon/Snapdragon)" << endl;
+            #else
+                cout << "Standard 32-bit / Other" << endl;
+            #endif
+
+            // System Time
+            time_t now = time(0);
+            cout << "Kernel Time: " << ctime(&now);
+            cout << "------------------------------" << endl;
+        }
 	else if (command == "run") {
             string scriptName;
             if (!(ss >> scriptName)) {
