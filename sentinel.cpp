@@ -85,8 +85,8 @@ int main()
         else if(command=="help")
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
-            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir" << endl;
-            cout << "System:    cd, time, clear, history, about,stats" << endl;
+            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export" << endl;
+            cout << "System:    cd, time, clear, history, about, stats, sysinfo" << endl;
             cout << "Utils:     say, help, exit" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
         }
@@ -116,6 +116,24 @@ int main()
             system("clear");
         #endif
 }
+            else if (command == "export") {
+            string exportFileName;
+            if (!(ss >> exportFileName)) {
+                cout << RED << "Error: Provide a filename (e.g., export my_session.txt)" << RESET << endl;
+            } else {
+                ofstream outFile(exportFileName);
+                if (outFile.is_open()) {
+                    outFile << "# Sentinel Session Export - " << __DATE__ << endl;
+                    for (const auto& cmd : history) {
+                        outFile << cmd << endl;
+                    }
+                    outFile.close();
+                    cout << GREEN << "Session history exported to " << exportFileName << RESET << endl;
+                } else {
+                    cout << RED << "Error: Could not create export file." << RESET << endl;
+                }
+            }
+        }
 	else if (command == "sysinfo") {
             cout << "\n--- Sentinel System Report ---" << endl;
             
