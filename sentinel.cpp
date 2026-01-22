@@ -85,7 +85,7 @@ int main()
         else if(command=="help")
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
-            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export" << endl;
+            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock" << endl;
             cout << "System:    cd, time, clear, history, about, stats, sysinfo" << endl;
             cout << "Utils:     say, help, exit" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
@@ -131,6 +131,33 @@ int main()
                     cout << GREEN << "Session history exported to " << exportFileName << RESET << endl;
                 } else {
                     cout << RED << "Error: Could not create export file." << RESET << endl;
+                }
+            }
+        }
+        else if (command == "lock") {
+            string fileName;
+            int key;
+            if (!(ss >> fileName >> key)) {
+                cout << RED << "Usage: lock <filename> <numeric_key>" << RESET << endl;
+            } else {
+                ifstream inFile(fileName, ios::binary);
+                if (!inFile) {
+                    cout << RED << "Error: File not found." << RESET << endl;
+                } else {
+                    
+                    string content((istreambuf_iterator<char>(inFile)), (istreambuf_iterator<char>()));
+                    inFile.close();
+                
+                    for (char &c : content) {
+                        c ^= key; 
+                    }
+
+                    ofstream outFile(fileName, ios::binary);
+                    outFile << content;
+                    outFile.close();
+
+                    cout << GREEN << "File '" << fileName << "' processed with key " << key << RESET << endl;
+                    cout << MAGENTA << "Note: Use the same command and key to unlock it." << RESET << endl;
                 }
             }
         }
@@ -389,4 +416,3 @@ int main()
     }
     return 0;
 }
-
