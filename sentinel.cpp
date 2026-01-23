@@ -387,6 +387,36 @@ int main()
         }
     }
 }
+        else if (command == "grep") {
+            string target;
+            if (!(ss >> target)) {
+                cout << RED << "Usage: grep <keyword>" << RESET << endl;
+            } else {
+                bool foundAny = false;
+                cout << "Searching for content: '" << target << "'..." << endl;
+
+                for (const auto& entry : fs::directory_iterator(".")) {
+                    if (fs::is_regular_file(entry.path())) {
+                        ifstream file(entry.path());
+                        string line;
+                        int lineNum = 1;
+                        
+                        while (getline(file, line)) {
+                            if (line.find(target) != string::npos) {
+                                cout << GREEN << "[MATCH] " << RESET 
+                                     << entry.path().filename().string() 
+                                     << " (Line " << lineNum << "): " << line << endl;
+                                foundAny = true;
+                            }
+                            lineNum++;
+                        }
+                    }
+                }
+                if (!foundAny) {
+                    cout << MAGENTA << "No files contain the keyword: " << target << RESET << endl;
+                }
+            }
+        }
         else if(command=="cd")
         {
             string path;
