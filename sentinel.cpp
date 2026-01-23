@@ -85,7 +85,7 @@ int main()
         else if(command=="help")
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
-            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock" << endl;
+            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock, info" << endl;
             cout << "System:    cd, time, clear, history, about, stats, sysinfo" << endl;
             cout << "Utils:     say, help, exit" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
@@ -159,6 +159,35 @@ int main()
                     cout << GREEN << "File '" << fileName << "' processed with key " << key << RESET << endl;
                     cout << MAGENTA << "Note: Use the same command and key to unlock it." << RESET << endl;
                 }
+            }
+        }
+	else if (command == "info") {
+            string fileName;
+            if (!(ss >> fileName)) {
+                cout << RED << "Usage: info <filename>" << RESET << endl;
+            } else if (!fs::exists(fileName)) {
+                cout << RED << "Error: File does not exist." << RESET << endl;
+            } else {
+                auto path = fs::path(fileName);
+                
+                
+                auto ftime = fs::last_write_time(path);
+                
+                auto sctp = chrono::time_point_cast<chrono::system_clock::duration>(
+                            ftime - decltype(ftime)::clock::now() + chrono::system_clock::now());
+                time_t cftime = chrono::system_clock::to_time_t(sctp);
+
+                auto perms = fs::status(path).permissions();
+                
+                cout << "\n--- File Information: " << fileName << " ---" << endl;
+                cout << "Full Path: " << fs::absolute(path).string() << endl;
+                cout << "Size:      " << fs::file_size(path) << " bytes" << endl;
+                cout << "Modified:  " << asctime(localtime(&cftime));
+                
+                cout << "Access:    ";
+                cout << ((perms & fs::perms::owner_read) != fs::perms::none ? "R" : "-");
+                cout << ((perms & fs::perms::owner_write) != fs::perms::none ? "W" : "-");
+                cout << "\n------------------------------------" << endl;
             }
         }
 	else if (command == "sysinfo") {
