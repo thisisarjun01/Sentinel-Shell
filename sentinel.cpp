@@ -38,6 +38,18 @@ string getUsername() {
     }
     return (user != nullptr) ? string(user) : "user";
 }
+void logError(const string& errorMessage) {
+    ofstream logFile(".sentinel_log", ios::app); // Open in append mode
+    if (logFile.is_open()) {
+        time_t now = time(0);
+        char* dt = ctime(&now);
+        string timestamp(dt);
+        timestamp.pop_back(); // Remove the newline at the end of ctime
+
+        logFile << "[" << timestamp << "] ERROR: " << errorMessage << endl;
+        logFile.close();
+    }
+}
 int main()
 {
     string input;
@@ -161,7 +173,7 @@ int main()
                 }
             }
         }
-	else if (command == "info") {
+        else if (command == "info") {
             string fileName;
             if (!(ss >> fileName)) {
                 cout << RED << "Usage: info <filename>" << RESET << endl;
@@ -457,21 +469,16 @@ int main()
             catch(const fs::filesystem_error& e)
             {
                 std::cerr <<"Error: "<<e.what() <<endl;
-            }
-            
+            }       
         }
-        else
-        {
-            int result=system(input.c_str());
-            if(result!=0)
-            {
-                cout <<RED<<"sentinel: '" << command << "' is not a recognized internal or system command." <<RESET<<endl;
+        else {
+            int result = system(input.c_str());
+            if(result != 0) {
+                string err = "Unrecognized command: " + command;
+                cout << RED << "sentinel: '" << command << "' is not recognized." << RESET << endl;
+                logError(err);
             }
         }
-        
-
-
-
     }
     return 0;
 }
