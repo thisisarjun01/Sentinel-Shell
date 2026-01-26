@@ -14,6 +14,14 @@ using namespace std;
 #define BLUE    "\033[34m"     
 #define RED     "\033[31m"     
 #define MAGENTA "\033[35m"  
+
+#ifdef _WIN32
+    #include <process.h>
+    #define environ _environ 
+#else
+    extern char **environ; 
+#endif
+
 void loadHistory(vector<string>& history) {
     ifstream file(".sentinel_history");
     string line;
@@ -39,12 +47,12 @@ string getUsername() {
     return (user != nullptr) ? string(user) : "user";
 }
 void logError(const string& errorMessage) {
-    ofstream logFile(".sentinel_log", ios::app); // Open in append mode
+    ofstream logFile(".sentinel_log", ios::app); 
     if (logFile.is_open()) {
         time_t now = time(0);
         char* dt = ctime(&now);
         string timestamp(dt);
-        timestamp.pop_back(); // Remove the newline at the end of ctime
+        timestamp.pop_back(); 
 
         logFile << "[" << timestamp << "] ERROR: " << errorMessage << endl;
         logFile.close();
@@ -98,7 +106,7 @@ int main()
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
             cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock, info" << endl;
-            cout << "System:    cd, time, clear, history, about, stats, sysinfo" << endl;
+            cout << "System:    cd, time, clear, history, about, stats, sysinfo, env" << endl;
             cout << "Utils:     say, help, exit" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
         }
@@ -204,8 +212,6 @@ int main()
         }
 	else if (command == "sysinfo") {
             cout << "\n--- Sentinel System Report ---" << endl;
-            
-            // Detecting Operating System
             cout << "OS:       ";
             #ifdef _WIN32
                 cout << "Windows (64-bit/32-bit)" << endl;
@@ -358,7 +364,6 @@ int main()
             if (!(ss >> dirName)) {
                 cout << RED << "Error: Provide a directory name." << RESET << endl;
             } else {
-                // remove_all returns the number of files/dirs deleted
                 if (fs::remove_all(dirName) > 0) {
                     cout << "Successfully removed directory and its contents: " << dirName << endl;
                 } else {
@@ -457,6 +462,13 @@ int main()
                     cout << MAGENTA << "No files contain the keyword: " << target << RESET << endl;
                 }
             }
+        }
+        else if (command == "env") {
+            cout << "\n--- System Environment Variables ---" << endl;
+            for (char **env = environ; *env != 0; env++) {
+                cout << BLUE << *env << RESET << endl;
+            }
+            cout << "------------------------------------" << endl;
         }
         else if(command=="cd")
         {
