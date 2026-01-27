@@ -122,12 +122,41 @@ int main()
                 cout << "Theme updated!" << endl;
             }
         }
+        else if (command == "calc") {
+            double num1, num2;
+            char op;
+            if (!(ss >> num1 >> op >> num2)) {
+                cout << RED << "Usage: calc <num1> <operator> <num2>" << RESET << endl;
+                cout << "Example: calc 10 + 5" << endl;
+            } else {
+                double result = 0;
+                bool valid = true;
+
+                if (op == '+') result = num1 + num2;
+                else if (op == '-') result = num1 - num2;
+                else if (op == '*') result = num1 * num2;
+                else if (op == '/') {
+                    if (num2 != 0) result = num1 / num2;
+                    else {
+                        cout << RED << "Error: Division by zero!" << RESET << endl;
+                        valid = false;
+                    }
+                } else {
+                    cout << RED << "Error: Unknown operator '" << op << "'" << RESET << endl;
+                    valid = false;
+                }
+
+                if (valid) {
+                    cout << GREEN << "Result: " << RESET << result << endl;
+                }
+            }
+        }
         else if(command=="help")
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
             cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock, info" << endl;
             cout << "System:    cd, time, clear, history, about, stats, sysinfo, env" << endl;
-            cout << "Utils:     say, help, exit, theme" << endl;
+            cout << "Utils:     say, help, exit, theme, calc" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
         }
         else if (command == "about")
