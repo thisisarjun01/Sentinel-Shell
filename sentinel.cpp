@@ -60,6 +60,8 @@ void logError(const string& errorMessage) {
 }
 int main()
 {
+    string promptColor = MAGENTA;
+    string pathColor = BLUE;
     string input;
     vector<string> history;
     loadHistory(history);
@@ -73,7 +75,7 @@ int main()
 };
     while(true)
     {
-        cout << MAGENTA << username << "@sentinel" << RESET << ":" << BLUE << fs::current_path().string() << RESET << "> ";
+        cout << promptColor << username << "@sentinel" << RESET << ":" << pathColor << fs::current_path().string() << RESET << "> ";
         if(!getline(cin,input))break;
         if(input.empty())continue;
 
@@ -102,12 +104,30 @@ int main()
         {
             break;
         }
+        else if (command == "theme") {
+            string colorChoice;
+            if (!(ss >> colorChoice)) {
+                cout << "Usage: theme <red|green|blue|magenta|cyan|yellow>" << endl;
+            } else {
+                for (char &c : colorChoice) c = tolower(c);
+                
+                if (colorChoice == "red") promptColor = RED;
+                else if (colorChoice == "green") promptColor = GREEN;
+                else if (colorChoice == "blue") promptColor = BLUE;
+                else if (colorChoice == "magenta") promptColor = MAGENTA;
+                else if (colorChoice == "cyan") promptColor = "\033[36m";
+                else if (colorChoice == "yellow") promptColor = "\033[33m";
+                else cout << RED << "Unknown color choice!" << RESET << endl;
+                
+                cout << "Theme updated!" << endl;
+            }
+        }
         else if(command=="help")
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
             cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock, info" << endl;
             cout << "System:    cd, time, clear, history, about, stats, sysinfo, env" << endl;
-            cout << "Utils:     say, help, exit" << endl;
+            cout << "Utils:     say, help, exit, theme" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
         }
         else if (command == "about")
