@@ -151,12 +151,34 @@ int main()
                 }
             }
         }
+        else if (command == "bundle") {
+            string file1, file2, archiveName;
+            if (!(ss >> file1 >> file2 >> archiveName)) {
+                cout << RED << "Usage: bundle <file1> <file2> <archive_name>" << RESET << endl;
+            } else {
+                ifstream f1(file1), f2(file2);
+                ofstream arc(archiveName);
+                
+                if (!f1 || !f2 || !arc) {
+                    cout << RED << "Error: Check if files exist and archive can be created." << RESET << endl;
+                } else {
+                    arc << "SENTINEL_ARCHIVE_V1" << endl;
+                    arc << "#FILE1:" << file1 << endl;
+                    arc << f1.rdbuf() << "\n---END---\n";
+                    
+                    arc << "#FILE2:" << file2 << endl;
+                    arc << f2.rdbuf() << "\n---END---\n";
+                    
+                    cout << GREEN << "Files bundled successfully into " << archiveName << RESET << endl;
+                }
+            }
+        }
         else if(command=="help")
         {
             cout << "\n--- Sentinel Built-in Commands ---" << endl;
-            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock, info" << endl;
+            cout << "File Ops:  create, write, read, delete, list, mkdir, rmdir, export, lock, info, bundle" << endl;
             cout << "System:    cd, time, clear, history, about, stats, sysinfo, env" << endl;
-            cout << "Utils:     say, help, exit, theme, calc" << endl;
+            cout << "Utils:     say, help, exit, theme" << endl;
             cout << "External:  Any system command (e.g., python, mkdir)\n" << endl;
         }
         else if (command == "about")
