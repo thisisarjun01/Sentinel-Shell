@@ -32,6 +32,27 @@ void loadHistory(vector<string>& history) {
         file.close();
     }
 }
+void displayStartup(string user) {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+
+    cout << "\033[36m" << R"(
+   _____ ______ _   _ _______ _____ _   _ ______ _      
+  / ____|  ____| \ | |__   __|_   _| \ | |  ____| |     
+ | (___ | |__  |  \| |  | |    | | |  \| | |__  | |     
+  \___ \|  __| | . ` |  | |    | | | . ` |  __| | |     
+  ____) | |____| |\  |  | |   _| |_| |\  | |____| |____ 
+ |_____/|______|_| \_|  |_|  |_____|_| \_|______|______|
+    )" << "\033[0m" << endl;
+    
+    cout << "--- Sentinel Shell v1.0 | Stable Build ---" << endl;
+    cout << "Welcome back, " << user << "!" << endl;
+    cout << "Type 'help' to see available commands." << endl;
+    cout << "------------------------------------------\n" << endl;
+}
 void saveToHistoryFile(const string& input) {
     ofstream file(".sentinel_history", ios::app);
     if (file.is_open()) {
@@ -60,6 +81,7 @@ void logError(const string& errorMessage) {
 }
 int main()
 {
+    
     string promptColor = MAGENTA;
     string pathColor = BLUE;
     string input;
@@ -73,6 +95,7 @@ int main()
     {"md", "mkdir"},
     {"rd", "rmdir"}
 };
+    displayStartup(username);
     while(true)
     {
         cout << promptColor << username << "@sentinel" << RESET << ":" << pathColor << fs::current_path().string() << RESET << "> ";
